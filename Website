@@ -1,0 +1,143 @@
+<?php include 'header.php'; ?>
+
+<div class="container">
+    <div class="team">
+        <?php
+        $members = [
+            [
+                "name" => "Richmond Yabut",
+                "role" => "Group Leader",
+                "age" => 25,
+                "birthplace" => "Muntinlupa",
+                "student_status" => "A 3rd year BSIT Student",
+                "employment" => "Working Student",
+                "img" => "richmond.jpg",
+                "link" => "https://www.instagram.com/zenkii.y?igsh=MTE4c2Z5bmxvdWZh"
+            ],
+            [
+                "name" => "Rongavilla Almar",
+                "role" => "Member",
+                "age" => 20,
+                "birthplace" => "Muntinlupa",
+                "student_status" => "A 3rd year BSIT Student",
+                "employment" => "Working Student",
+                "img" => "Almar.jpg",
+                "link" => "https://www.facebook.com/25rongavilla?mibextid=ZbWKwL"
+            ],
+            [
+                "name" => "Angelo Coronejo",
+                "role" => "Member",
+                "age" => 20,
+                "birthplace" => "Pasig City",
+                "student_status" => "A 3rd year BSIT Student",
+                "employment" => "Working Student",
+                "img" => "Angelo.jpg",
+                "link" => "https://www.instagram.com/guevarra__angelo?igsh=c2VwcW52bnA3cjJ1"
+            ],
+            [
+                "name" => "Beyonce Ciprez",
+                "role" => "Member",
+                "age" => 20,
+                "birthplace" => "Muntinlupa",
+                "student_status" => "A 3rd year BSIT Student",
+                "employment" => "Fulltime Student",
+                "img" => "Beyonce.jpg",
+                "link" => "https://www.instagram.com/yceecey?igsh=MXV6NnRjb3NtOG12Yw%3D%3D&utm_source=qr"
+            ],
+            [
+                "name" => "Jan Lea Capones",
+                "role" => "Member",
+                "age" => 20,
+                "birthplace" => "Muntinlupa",
+                "student_status" => "A 3rd year BSIT Student",
+                "employment" => "Working Student",
+                "img" => "Lea.jpg",
+                "link" => "https://www.instagram.com/perty_lea?igsh=MWd6NnZxNGxpeWtnaA=="
+            ]
+            
+        ];
+
+        foreach ($members as $member) {
+            echo "
+            <a href='{$member['link']}' class='team-member' target='_blank' onclick='confirmLink(event)'>
+                <img src='{$member['img']}' alt='{$member['name']}'>
+                <h2>{$member['name']}</h2>
+                <p>{$member['role']}</p>
+                <p>AGE: {$member['age']}</p>
+                <p>Birthplace: {$member['birthplace']}</p>
+                <p>{$member['student_status']}</p>
+                <p>{$member['employment']}</p>
+            </a>";
+        }
+        ?>
+    </div>
+
+    <!-- Form to collect user data (using POST) -->
+    <h2>Add a new team member</h2>
+    <form id="VALIDATION" action="validation.php" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br>
+        
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br>
+        
+        <label for="birthplace">Birthplace:</label>
+        <input type="text" id="birthplace" name="birthplace" required><br>
+        
+        <label for="student_status">Student Status:</label>
+        <input type="text" id="student_status" name="student_status" required><br>
+
+        
+        <label for="employment">Employment:</label>
+        <select id="employment" name="employment" required>
+            <option value="Working Student">Working Student</option>
+            <option value="Fulltime Student">Fulltime Student</option>
+        </select><br>
+
+        <label for="img">Image Path:</label>
+        <input type="text" id="img" name="img" placeholder="e.g., images/newmember.jpg" required><br>
+        
+        <label for="link">Profile Link:</label>
+        <input type="url" id="link" name="link" required><br>
+
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        
+        $name = htmlspecialchars(trim($_POST['name']));
+        $role = htmlspecialchars(trim($_POST['role']));
+        $age = filter_input(INPUT_POST, 'age', FILTER_VALIDATE_INT);
+        $birthplace = htmlspecialchars(trim($_POST['birthplace']));
+        $student_status = htmlspecialchars(trim($_POST['student_status']));
+        $employment = htmlspecialchars(trim($_POST['employment']));
+        $img = htmlspecialchars(trim($_POST['img']));
+        $link = filter_var(trim($_POST['link']), FILTER_VALIDATE_URL);
+
+        if ($name && $role && $age && $birthplace && $student_status && $employment && $img && $link) {
+            echo "
+            <div class='new-member-output'>
+                <h3>New member added:</h3>
+                <p><strong>Name:</strong> $name</p>
+                <p><strong>Role:</strong> $role</p>
+                <p><strong>Age:</strong> $age</p>
+                <p><strong>Birthplace:</strong> $birthplace</p>
+                <p><strong>Student Status:</strong> $student_status</p>
+                <p><strong>Employment:</strong> $employment</p>
+                <p><strong>Profile Link:</strong> <a href='$link' target='_blank'>$link</a></p>
+                <p><strong>Image:</strong><br><img src='$img' alt='$name' style='max-width:200px;'></p>
+            </div>";
+        } else {
+            echo "<p class='error'>Please ensure all fields are correctly filled out.</p>";
+        }
+    }
+    ?>
+</div>
+
+<?php include 'footer.php'; ?>
